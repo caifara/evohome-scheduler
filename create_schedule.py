@@ -18,6 +18,13 @@ high_morning = [
             }, 
         ]
 
+low_noon = [
+        {
+            "heatSetpoint": 15.0, 
+            "TimeOfDay": "12:20:00"
+            }, 
+        ]
+
 noon = [
         {
             "heatSetpoint": 21.0, 
@@ -48,6 +55,32 @@ high_afternoon = [
         {
             "heatSetpoint": 15.0, 
             "TimeOfDay": "23:00:00"
+            }, 
+        ]
+
+low_afternoon_lossy = [
+        {
+            "heatSetpoint": 16.0, 
+            "TimeOfDay": "13:30:00"
+            }, 
+        {
+            "heatSetpoint": 21.0, 
+            "TimeOfDay": "16:30:00"
+            }, 
+        {
+            "heatSetpoint": 15.0, 
+            "TimeOfDay": "20:00:00"
+            }, 
+        ]
+
+high_afternoon_lossy = [
+        {
+            "heatSetpoint": 21.0, 
+            "TimeOfDay": "13:30:00"
+            }, 
+        {
+            "heatSetpoint": 15.0, 
+            "TimeOfDay": "20:00:00"
             }, 
         ]
 
@@ -217,24 +250,35 @@ schedule = {
         "name": "Veranda", 
         "schedule": create_schedule(
             [
-                [ low_morning + noon + low_afternoon ],
-                [ low_morning + noon + low_afternoon ],
-                [ low_morning + noon + low_afternoon ],
-                [ low_morning + noon + low_afternoon ],
-                [ low_morning + noon + low_afternoon ],
-                [ high_morning + noon + high_afternoon ],
-                [ high_morning + noon + high_afternoon ]
-                ]
+                low_morning + noon + low_afternoon_lossy,
+                high_morning + noon + high_afternoon_lossy,
+                high_morning + noon + high_afternoon_lossy,
+                high_morning + low_noon + low_afternoon_lossy,
+                low_morning + noon + low_afternoon_lossy,
 
+                high_morning + noon + high_afternoon_lossy,
+                high_morning + noon + high_afternoon_lossy
+                ]
             )
         },
     "1406794": {
         "name": "Woonkamer", 
-        "schedule": create_schedule([sp_room] * 7)
+        "schedule": create_schedule(
+            [
+                low_morning + noon + low_afternoon,
+                high_morning + noon + high_afternoon,
+                high_morning + noon + high_afternoon,
+                high_morning + low_noon + low_afternoon,
+                low_morning + noon + low_afternoon,
+
+                high_morning + noon + high_afternoon,
+                high_morning + noon + high_afternoon
+                ]
+            )
         },
     }
 
-print("writing file with new schedule")
+print("Nieuw bestand schrijven ...")
 
 f = open("new_zone_schedules.json", "w")
 f.write(json.dumps(schedule, indent=4))
